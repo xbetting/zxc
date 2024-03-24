@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="card m-5 p-3">
+        <div class="card-body">
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>When</th>
+                    <th>Game</th>
+                    <th>Tip</th>
+                    <th>Odds</th>
+                    <th>Sport</th>
+                    <th>Status</th>
+                    <th>Bettor</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let pick of data">
+                    <td>{{ pick.gameDateMillis | date:'dd/MM/yyyy - hh:mmaaa' }}</td>
+                    <td>{{ pick.game }}</td>
+                    <td>{{ pick.tip }}</td>
+                    <td>{{ pick.odds | number:'1.0-2'}}</td>
+                    <td>{{ pick.info }}</td>
+                    <td>{{ pick.gameStatus }}</td>
+                    <td>{{ pick.bettor }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
