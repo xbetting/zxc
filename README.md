@@ -32,8 +32,8 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## PROD build & deployment
 `npm install -g angular-cli-ghpages`
 
-`ng build --base-href`
+`ng add angular-cli-ghpages`
 
-`angular-cli-ghpages -d dist/zxc-code/ --no-silent`
+`ng deploy --base-href=/reponame/`
 
 `https://<username>.github.io/<reponame>/`
