@@ -1,6 +1,6 @@
 export abstract class AppConstants {
 
-  static readonly DEBUG = true;
+  static readonly DEBUG = false;
 
   static readonly MILLIS_HOUR = 60 * 60 * 1000;
   static readonly MILLIS_DAY = 24 * this.MILLIS_HOUR;
