@@ -19,6 +19,18 @@ export class ApiService {
     });
   }
 
+  getAzuroStats(endpoint: string, query: any, startTime: any, endTime: any, affiliate: string, amount: number) {
+    return axios.post(endpoint, {
+      query: query,
+      variables: {
+        startTime: startTime,
+        endTime: endTime,
+        affiliate: affiliate,
+        amount: amount
+      }
+    });
+  }
+
   getXBetsTipsters(username: string, endpoint: string, query: any) {
     return axios.post(endpoint, {
       query: query,

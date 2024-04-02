@@ -1,4 +1,19 @@
-<div class="container">
+<br/>
+<form class="form" #f="ngForm">
+    <div class="form-group">
+      <input type="text" [(ngModel)]="userData.password" #password="ngModel" name="password"  class="form-control rounded-0" required >
+      <input type="number" [(ngModel)]="userData.startSeconds" #startSeconds="ngModel" name="startSeconds"  class="form-control rounded-0">
+    </div>
+    <br/>
+    <button [disabled]= "!f.form.valid" type="button" (click)="update()" 
+       class="btn btn-success float-right">Search</button>
+</form>
+<br/>
+<button type="button" (click)="fetchStats()" class="btn btn-success float-right">Fetch Stats</button>
+Bets: {{count}} 
+Volume: {{total}}
+<br/>
+<div class="container" *ngIf="data.length > 0">
     <div class="card m-5 p-3">
         <div class="card-body">
             <table class="table table-bordered table-striped table-hover">
