@@ -10,6 +10,8 @@
                     <th>Odds</th>
                     <th>Sport</th>
                     <th>Bettor</th>
+                    <th>Yield</th>
+                    <th>Win Ratio</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -20,6 +22,8 @@
                     <td>{{ pick.odds | number:'1.0-2'}}</td>
                     <td>{{ pick.info }}</td>
                     <td>{{ pick.bettor }}</td>
+                    <td>{{ pick.pnl }}%</td>
+                    <td>{{ pick.winRate }}%</td>
                 </tr>
                 </tbody>
             </table>

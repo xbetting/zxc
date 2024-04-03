@@ -64,7 +64,7 @@ export class XBetsComponent implements OnInit {
           let userData = response.data.data.user;
           let stats = response.data.data.user.stats;
           if (stats.profit > 1 && stats.yield > 1 && stats.winRate > 40) {
-            this.fetchPicks(userData.guid, endpoint, query2);
+            this.fetchPicks(userData.guid, endpoint, query2, Math.trunc(stats.yield), Math.trunc(stats.winRate));
           } else if (AppConstants.DEBUG) {
             console.log('skipping ' + username);
           }
@@ -74,7 +74,7 @@ export class XBetsComponent implements OnInit {
         });
   }
 
-  fetchPicks(userId: string, endpoint: string, query: any): void {
+  fetchPicks(userId: string, endpoint: string, query: any, pnl: number, winRate: number): void {
     this.apiService
         .getXBets(userId, endpoint, query)
         .then(response => {
@@ -94,18 +94,28 @@ export class XBetsComponent implements OnInit {
               info: info,
               tip: item.oneliner,
               odds: item.bet.odds,
-              gameDateMillis: gameMillis
+              gameDateMillis: gameMillis,
+              pnl: pnl,
+              winRate: winRate
             }
             this.picks.push(pick);
 
             const dataSet = [...new Set(this.picks)];
-            dataSet.sort((obj1: { gameDateMillis: number; }, obj2: { gameDateMillis: number; }) => {
+            dataSet.sort((obj1: { gameDateMillis: number; game:string;}, obj2: { gameDateMillis: number; game:string;}) => {
               if (obj1.gameDateMillis > obj2.gameDateMillis) {
                   return 1;
               }
           
               if (obj1.gameDateMillis < obj2.gameDateMillis) {
                   return -1;
+              }
+
+              if (obj1.game > obj2.game) {
+                return 1;
+              }
+
+              if (obj1.game < obj2.game) {
+                return -1;
               }
           
               return 0;
