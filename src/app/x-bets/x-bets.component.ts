@@ -5,11 +5,12 @@ import { AppConstants } from '../app.constants';
 import { CryptoService } from '../crypto.service';
 import { Subscription } from 'rxjs';
 import { CacheService } from '../cache.service';
+import { DataTablesModule } from 'angular-datatables';
 
 @Component({
   selector: 'app-x-bets',
   standalone: true,
-  imports: [NgFor, CommonModule],
+  imports: [NgFor, CommonModule, DataTablesModule],
   templateUrl: './x-bets.component.html',
   styleUrl: './x-bets.component.css'
 })
@@ -17,11 +18,17 @@ export class XBetsComponent implements OnInit {
 
   picks: any = [];
   data: any = [];
+  startMillis: number = 0;
+  endMillis: number = 0;
+
   private cacheSubscription: Subscription;
 
   constructor(private apiService: ApiService, private cryptoService: CryptoService, private cacheService: CacheService) { }
 
   ngOnInit(): void {
+    this.startMillis = new Date().getTime() - AppConstants.MILLIS_HOUR;
+    this.endMillis = new Date().getTime() + 2*AppConstants.MILLIS_DAY;
+
     this.picks = [];
     if (localStorage && localStorage.getItem("token") != null) {
       this.cacheSubscription = this.cacheService.cache$.subscribe(data => {
@@ -29,6 +36,15 @@ export class XBetsComponent implements OnInit {
       });
 
       this.fetchData();
+
+      setTimeout(()=>{
+        $('#xbetstable').DataTable({
+          pagingType: 'full_numbers',
+          pageLength: 200,
+          processing: true,
+          lengthMenu : [200, 300],
+        });
+      }, 1);
     }
   }
 
@@ -88,24 +104,28 @@ export class XBetsComponent implements OnInit {
             let gameDate = Date.parse(dateStr);
             // minus 1 hour because gameDate is in CET
             let gameMillis = gameDate - AppConstants.MILLIS_HOUR;
-            let pick = {
-              bettor: item.user.username,
-              game: item.match.title,
-              info: info,
-              tip: item.oneliner,
-              odds: item.bet.odds,
-              gameDateMillis: gameMillis,
-              pnl: pnl,
-              winRate: winRate
+            if (gameMillis >= this.startMillis && gameMillis <= this.endMillis) {
+              let pick = {
+                bettor: item.user.username,
+                game: item.match.title,
+                info: info,
+                tip: item.oneliner,
+                odds: item.bet.odds,
+                gameDateMillis: gameMillis,
+                pnl: pnl,
+                winRate: winRate
+              }
+              this.picks.push(pick);
             }
-            this.picks.push(pick);
+          });
 
+          if (this.picks.length > 0) {
             const dataSet = [...new Set(this.picks)];
             dataSet.sort((obj1: { gameDateMillis: number; game:string;}, obj2: { gameDateMillis: number; game:string;}) => {
               if (obj1.gameDateMillis > obj2.gameDateMillis) {
                   return 1;
               }
-          
+
               if (obj1.gameDateMillis < obj2.gameDateMillis) {
                   return -1;
               }
@@ -117,12 +137,13 @@ export class XBetsComponent implements OnInit {
               if (obj1.game < obj2.game) {
                 return -1;
               }
-          
+
               return 0;
             });
             this.cacheService.set('x-bets', dataSet);
-          });
-
+          } else {
+            this.cacheService.set('x-bets', []);
+          }
         })
         .catch(error => {
           console.log(error);

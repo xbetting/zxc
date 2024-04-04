@@ -1,25 +1,13 @@
 <br/>
-<form class="form" #f="ngForm">
-    <div class="form-group">
-      <input type="text" [(ngModel)]="userData.password" #password="ngModel" name="password"  class="form-control rounded-0" required >
-      <input type="number" [(ngModel)]="userData.startSeconds" #startSeconds="ngModel" name="startSeconds"  class="form-control rounded-0">
-    </div>
-    <br/>
-    <button [disabled]= "!f.form.valid" type="button" (click)="update()" 
-       class="btn btn-success float-right">Search</button>
-</form>
-<br/>
 <button type="button" (click)="fetchStats()" class="btn btn-success float-right">Fetch Stats</button>
 Bets: {{count}} 
 Volume: {{total}}
 <br/>
-<div class="container" *ngIf="data.length > 0">
-    <div class="card m-5 p-3">
-        <div class="card-body">
-            <table class="table table-bordered table-striped table-hover">
-                <thead>
-                <tr>
-                    <th>When</th>
+<div class="container p-5">
+    <table class="table table-striped table-bordered table-sm row-border hover" id="bxbtbetstable">
+      <thead>
+        <tr>
+            <th>When</th>
                     <th>Game</th>
                     <th>Tip</th>
                     <th>Odds</th>
@@ -29,11 +17,11 @@ Volume: {{total}}
                     <th>Status</th>
                     <th>Bettor</th>
                     <th>BetID</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let pick of data">
-                    <td>{{ pick.gameDateMillis | date:'dd/MM/yyyy - hh:mmaaa' }}</td>
+        </tr>
+      </thead>
+      <tbody>
+       <tr *ngFor="let pick of data">
+        <td>{{ pick.gameDateMillis | date:'dd/MM/yyyy - hh:mmaaa' }}</td>
                     <td>{{ pick.game }}</td>
                     <td>{{ pick.tip }}</td>
                     <td>{{ pick.odds | number:'1.0-2'}}</td>
@@ -43,10 +31,7 @@ Volume: {{total}}
                     <td>{{ pick.gameStatus }}</td>
                     <td>{{ pick.bettor }}</td>
                     <td>{{ pick.betId }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-    </div>
+         </tr>
+      </tbody>
+    </table>
 </div>

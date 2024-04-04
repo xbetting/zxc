@@ -2,9 +2,9 @@
   <a class="button" routerLink="/azuro-bets" routerLinkActive="activebutton" ariaCurrentWhenActive="page">Azuro Bets</a> |
   <a class="button" routerLink="/bxbt" routerLinkActive="activebutton" ariaCurrentWhenActive="page">BXBT</a> |
   <a class="button" routerLink="/x-bets" routerLinkActive="activebutton" ariaCurrentWhenActive="page">X Bets</a> |
-  <a class="button" (click)="resetCache()" *ngIf="_authService.loggedIn" routerLinkActive="activebutton" ariaCurrentWhenActive="page">Reset Cache</a>
-  <a class="button" (click)="logoutUser()" *ngIf="_authService.loggedIn" routerLinkActive="activebutton" ariaCurrentWhenActive="page">Logout</a>
-  <a class="button" routerLink="/login" *ngIf="!_authService.loggedIn" routerLinkActive="activebutton" ariaCurrentWhenActive="page">Login</a>
+  <a class="button" (click)="resetCache()" *ngIf="_authService.loggedIn" routerLinkActive="activebutton" ariaCurrentWhenActive="page">Reset Cache</a> | 
+  <a class="button" (click)="logoutUser()" *ngIf="_authService.loggedIn" routerLinkActive="activebutton" ariaCurrentWhenActive="page">Logout</a> | 
+  <a class="button" routerLink="/login" *ngIf="!_authService.loggedIn" routerLinkActive="activebutton" ariaCurrentWhenActive="page">Login</a> | 
 </nav>
 <div class="container">
   <router-outlet></router-outlet>

@@ -6,12 +6,13 @@ import { AppConstants } from '../app.constants';
 import { CryptoService } from '../crypto.service';
 import { Subscription } from 'rxjs';
 import { CacheService } from '../cache.service';
+import { DataTablesModule } from 'angular-datatables';
 
 
 @Component({
   selector: 'app-azuro-bets',
   standalone: true,
-  imports: [NgFor, CommonModule],
+  imports: [NgFor, CommonModule, DataTablesModule],
   templateUrl: './azuro-bets.component.html',
   styleUrl: './azuro-bets.component.css'
 })
@@ -19,11 +20,13 @@ export class AzuroBetsComponent implements OnInit {
 
   picks: any = [];
   data: any = [];
+  startMillis: number = 0;
   private cacheSubscription: Subscription;
 
   constructor(private service: ApiService, private cryptoService: CryptoService, private cacheService: CacheService) { }
 
   ngOnInit(): void {
+    this.startMillis = new Date().getTime() - AppConstants.MILLIS_HOUR;
     this.picks = [];
     if (localStorage && localStorage.getItem("token") != null) {
       this.cacheSubscription = this.cacheService.cache$.subscribe(data => {
@@ -31,11 +34,20 @@ export class AzuroBetsComponent implements OnInit {
       });
 
       this.fetchData();
+
+      setTimeout(()=>{
+        $('#azbetstable').DataTable({
+          pagingType: 'full_numbers',
+          pageLength: 50,
+          processing: true,
+          lengthMenu : [50, 100, 200],
+        });
+      }, 1);
     }
   }
 
   fetchData() {
-    const cachedData = this.cacheService.get('azuro-bets');
+    const cachedData = this.cacheService.get('az-bets');
     if (!cachedData) {
       if (AppConstants.DEBUG) {
         console.log('azuro: fetching data from API');
@@ -83,7 +95,7 @@ export class AzuroBetsComponent implements OnInit {
                     gameDateMillis: item.outcome.condition.game.startsAt * 1000,
                     gameStatus: item.outcome.condition.game.status
                 }
-                if (pick.gameStatus !== 'Resolved') {
+                if (pick.gameDateMillis >= this.startMillis && pick.gameStatus !== 'Resolved') {
                   this.picks.push(pick);
                 }
             });
@@ -109,11 +121,9 @@ export class AzuroBetsComponent implements OnInit {
 
               return 0;
             });
-            //this.data = dataSet;
-            this.cacheService.set('azuro-bets', dataSet);
+            this.cacheService.set('az-bets', dataSet);
           } else {
-            //this.data = [];
-            this.cacheService.set('azuro-bets', []);
+            this.cacheService.set('az-bets', []);
           }
         })
         .catch(error => {

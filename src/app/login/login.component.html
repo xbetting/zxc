@@ -1,8 +1,13 @@
-<form class="form" #f="ngForm">
-<div class="form-group">
-  <input type="password" [(ngModel)]="loginUserData.password" #password="ngModel" name="password"  class="form-control rounded-0" required >
-</div>
 <br/>
-<button [disabled]= "!f.form.valid" type="button" (click)="login()" 
-   class="btn btn-success float-right">Enter the Matrix</button>
-</form>
+<div class="card">
+  <div class="card-body">
+    <form class="form" #f="ngForm">
+      <div class="form-group">
+        <input type="password" [(ngModel)]="loginUserData.password" #password="ngModel" name="password"  class="form-control rounded-0" required >
+      </div>
+      <br/>
+      <button [disabled]= "!f.form.valid" type="button" (click)="login()"
+         class="btn btn-success float-right">Enter the Matrix</button>
+    </form>
+  </div>
+</div>
