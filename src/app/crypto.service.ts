@@ -25,6 +25,9 @@ export class CryptoService {
       const decData = CryptoJS.enc.Base64.parse(text).toString(CryptoJS.enc.Utf8);
       const bytes = CryptoJS.AES.decrypt(decData, key).toString(CryptoJS.enc.Utf8);
       const value = JSON.parse(bytes);
+      if (AppConstants.DEBUG) {
+        console.log(value);
+      }
       return value;
     } catch (error: any) {
       if (AppConstants.DEBUG) {
